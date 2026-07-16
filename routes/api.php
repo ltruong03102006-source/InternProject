@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\DeadlineController;
+use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\NoteController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\TagController;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +16,8 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/profile', [ProfileController::class, 'update']);
+    Route::put('/profile/password', [ProfileController::class, 'password']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/subjects', [SubjectController::class, 'index']);
     Route::post('/subjects', [SubjectController::class, 'store']);
@@ -75,6 +81,20 @@ Route::middleware('auth:sanctum')->group(function () {
         'success' => false,
         'message' => 'Không tìm thấy tag.',
     ], 404));
+    Route::apiResource('deadlines', DeadlineController::class);
+    Route::patch('/deadlines/{deadline}/status', [DeadlineController::class, 'updateStatus']);
+    Route::get('/documents', [DocumentController::class, 'index']);
+    Route::post('/documents', [DocumentController::class, 'store']);
+    Route::get('/documents/{document}', [DocumentController::class, 'show']);
+    Route::get('/documents/{document}/download', [DocumentController::class, 'download']);
+    Route::delete('/documents/{document}', [DocumentController::class, 'destroy']);
+    Route::prefix('admin')->middleware('admin')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'dashboard']);
+        Route::get('/users', [AdminController::class, 'users']);
+        Route::patch('/users/{user}/status', [AdminController::class, 'toggleStatus']);
+        Route::get('/subjects', [AdminController::class, 'subjects']);
+        Route::get('/deadlines', [AdminController::class, 'deadlines']);
+    });
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/logout-all', [AuthController::class, 'logoutAll']);
 });

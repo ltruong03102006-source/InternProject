@@ -24,7 +24,7 @@ class TagController extends Controller
         ])->where('user_id', $userId);
 
         if ($request->filled('keyword')) {
-            $query->where('name', 'like', '%' . $request->query('keyword') . '%');
+            $query->where('name', 'like', '%'.$request->query('keyword').'%');
         }
 
         $tags = $query->latest()->paginate($perPage);

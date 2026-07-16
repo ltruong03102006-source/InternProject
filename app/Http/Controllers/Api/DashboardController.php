@@ -53,7 +53,7 @@ class DashboardController extends Controller
             ->select('id', 'subject_id', 'title', 'description', 'type', 'due_at', 'priority', 'status')
             ->where('user_id', $userId)
             ->whereNotIn('status', ['completed', 'cancelled'])
-            ->where('due_at', '>=', $now)
+            ->whereBetween('due_at', [$now, $now->copy()->addDays(7)])
             ->orderBy('due_at')
             ->limit(5)
             ->get();
