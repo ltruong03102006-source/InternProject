@@ -45,4 +45,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Tag::class);
     }
+
+    public function deadlines()
+    {
+        return $this->hasMany(Deadline::class);
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
 }

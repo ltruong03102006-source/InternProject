@@ -30,9 +30,7 @@ class TagController extends Controller
         ])->where('user_id', $userId);
 
         if ($request->filled('keyword')) {
-            $keyword = $request->query('keyword');
-
-            $query->where('name', 'like', "%{$keyword}%");
+            $query->where('name', 'like', '%'.$request->query('keyword').'%');
         }
 
         $tags = $query
