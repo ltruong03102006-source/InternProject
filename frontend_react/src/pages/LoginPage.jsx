@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { authApi } from "../api/authApi";
 
 function LoginPage() {
-  const navigate = useNavigate();
-
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -17,15 +15,15 @@ function LoginPage() {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    setForm((prev) => ({
-      ...prev,
+    setForm((previous) => ({
+      ...previous,
       [name]: value,
     }));
 
     setError("");
 
-    setFieldErrors((prev) => ({
-      ...prev,
+    setFieldErrors((previous) => ({
+      ...previous,
       [name]: null,
     }));
   };
@@ -48,9 +46,9 @@ function LoginPage() {
       }
 
       localStorage.setItem("access_token", token);
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(user || null));
 
-      navigate("/dashboard");
+      window.location.replace("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
 
@@ -107,6 +105,7 @@ function LoginPage() {
               value={form.email}
               onChange={handleChange}
               placeholder="student@example.com"
+              autoComplete="email"
               className={`w-full rounded-xl border px-4 py-3 text-slate-800 outline-none transition focus:ring-4 ${
                 fieldErrors.email
                   ? "border-red-400 focus:border-red-500 focus:ring-red-100"
@@ -137,6 +136,7 @@ function LoginPage() {
               value={form.password}
               onChange={handleChange}
               placeholder="Nhập mật khẩu"
+              autoComplete="current-password"
               className={`w-full rounded-xl border px-4 py-3 text-slate-800 outline-none transition focus:ring-4 ${
                 fieldErrors.password
                   ? "border-red-400 focus:border-red-500 focus:ring-red-100"
